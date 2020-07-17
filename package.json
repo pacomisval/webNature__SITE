@@ -1,0 +1,21 @@
+{
+  "name": "webnature",
+  "version": "1.0.0",
+  "description": "Web de productos naturales parte fromt",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "deploy": "npm run build && sh ./scripts/deploy.sh",
+    "build": "sh ./scripts/build.sh",
+    "serve": "onchange ./src/**/* -- npm run deploy"
+  },
+  "author": "Francisco Barrachina Blanco",
+  "license": "ISC",
+  "devDependencies": {
+    "node-sass": "^4.13.0",
+    "onchange": "^6.1.0"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}

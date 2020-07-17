@@ -1,0 +1,55 @@
+.c-menu {
+    background-color: pink;
+    margin-top: 25px;
+
+    &__link:first-child {
+        padding-left: 70px;
+    }
+
+    &__link {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 26px;
+        font-weight: bold;
+        color: white;
+        text-decoration: none;
+        padding: 20px 15px;
+    }
+
+    &__link:hover {
+        color: #888;
+    }
+
+    &__search {
+        margin-left: 560px;
+    }
+}
+
+@media (max-width: 1250px) {
+    .c-menu {
+
+        &__link {
+            font-size: 20px;
+        }
+        &__search {
+            margin-left: 430px;
+        }
+
+    }
+}
+
+@media (max-width: 1050px) {
+    .c-menu {
+
+        &__link {
+            font-size: 16px;
+            padding: 20px 5px;
+        }
+        &__search {
+            margin-left: 240px;
+        }
+    }
+}
+
+@media (max-width: 850px) {
+
+}
