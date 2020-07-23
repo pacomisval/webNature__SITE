@@ -1,9 +1,12 @@
 //import { setListenerSidebarItems } from './listeners.js';
+import { mostrarCarrito } from './carrito.js';
 
-let imgsCarousel;              // array imagenes carousel
-let categorias;                // array categorias
-let productos;                 // array productos
-let productosPorIdCategoria;   // array productos por categoria
+let imgsCarousel;              // array imagenes carousel de la DB
+let categorias;                // array categorias de la DB
+let productos;                 // array productos de la DB
+let productosPorIdCategoria;   // array productos por categoria de la DB
+
+let productosShoppinCart = [];      // array productos comprados
 
 let nombreCategoria;
 
@@ -93,6 +96,7 @@ function cargarPaginaInicio() {
     setListenerSidebarItems();
     setListenerMenu();
     setListenerButtonAddCarrito();
+    setListenerButtonCheckoutCarrito();
 }
 
 function cargarCarousel() {
@@ -285,7 +289,8 @@ function cargarCartasProductos(num) {
             .attr("id", "c-card")
             .addClass("c-card");
         let cardImage = $("<img>")
-            .attr("src", "assets/images/productos60/" + elem.foto)
+            .attr("src", "assets/images/productos/" + elem.foto)
+            .attr("style", "width: 60px")
             .addClass("c-card__image");
         let cardContent = $("<div/>").addClass("c-card__content");
         let cardTitle = $("<h4/>").addClass("c-card__title").append(elem.nombre);
@@ -313,13 +318,16 @@ function getDatosProducto(id) {
     $.each(productos, function(index, elem) {
         if(elem.id == id) {
             productoComprado = elem;
-            //console.log(productoComprado);
+            productosShoppinCart.push(elem);
         }
     });
     let nombre = productoComprado.nombre;
     let precio = productoComprado.precio;
     console.log(nombre);
     console.log(precio);
+    console.log(productosShoppinCart);
+
+    return productoComprado;
 } 
 
 ////////////////////////// LISTENERS //////////////////////////
@@ -328,7 +336,7 @@ function getDatosProducto(id) {
 function setListenerMenu() {
     $("#contenido-t").on("click", ".c-menu__link", function() {
         let nombreItemMenu = this.childNodes[0].nodeValue;
-        console.log(elementoMenu);
+        console.log(nombreItemMenu);
         
         // Carga el elemento de menu seleccionado
         menuSelected(nombreItemMenu);
@@ -361,12 +369,29 @@ function setListenerButtonAddCarrito() {
 
         // Obtiene los datos del producto, como nombre, precio, etc... .
         getDatosProducto(idProducto);
+        
     }); 
 }
 
 //////////// END LISTENER BOTON AÑADIR CARRITO ////////////////
+<<<<<<< HEAD
 /////////////////// LISTENER //////////////////////////////////
+=======
+//////////////// LISTENER CHECKOUT CARRITO ////////////////////
+function setListenerButtonCheckoutCarrito() {
+    $("#contenido-r").on("click", ".checkout", function() {
+        console.log("Factura de compra enviada a sistema de cobro, pendiente de confirmación");
 
+        if (productosShoppinCart != null) {
+            productosShoppinCart = [];
+        }
+        window.location ="/productos";
+    });
+}
+>>>>>>> paco1
+
+
+///////////// END LISTENER CHECKOUT CARRITO ////////////////////
 
 
 //////////////////// END LISTENER ////////////////////////////
@@ -393,6 +418,23 @@ function productosByIdCategoria(idCategoria, nombreCategoria) {
 }
 
 
+function menuSelected(nombreItemMenu) {
+    console.log("Has entrado en menuSelected");
+
+    switch (nombreItemMenu) {
+        case "Inicio":
+            console.log("Has seleccionado Inicio");
+        break;
+        case "Contacto":
+            console.log("Has seleccionado Contacto");
+        break;
+        case null:
+            console.log("Has seleccionado Carrito");
+            mostrarCarrito();
+        break;
+        default: console.log("Te has equivocado");
+    }
+}
 
 
 

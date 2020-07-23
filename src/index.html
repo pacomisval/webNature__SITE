@@ -6,6 +6,7 @@
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/carrito.css">
     <link rel="stylesheet" href="assets/scss/vendor/font-awesome/css/all.min.css">
 
     <title>Web Nature</title>
@@ -27,12 +28,12 @@
               </div>
               <div class="l-menu__bottom">
                   <ol class="c-menu">
-                      <a href="#" class="c-menu__link">Inicio</a>
-                      <a href="#" class="c-menu__link">Productos</a>
-                      <a href="#" class="c-menu__link">Eventos</a>
-                      <a href="#" class="c-menu__link">Blog</a>
-                      <a href="#" class="c-menu__link">Contacto</a>
-                      <a href="#" class="c-menu__link"><i class="fas fa-shopping-cart"></i>(0)</a>           
+                      <a href="#" class="c-menu__link" id="inicio-m">Inicio</a>
+                      <a href="/productos" class="c-menu__link" id="productos-m">Productos</a>
+                      <a href="/eventos" class="c-menu__link" id="eventos-m">Eventos</a>
+                      <a href="/blog" class="c-menu__link" id="blog-m">Blog</a>
+                      <a href="#" class="c-menu__link" id="contacto-m">Contacto</a>
+                      <a href="#" class="c-menu__link" id="carrito-m"><i class="fas fa-shopping-cart"></i>(0)</a>           
                   </ol>
               </div>
           </div>
@@ -95,8 +96,9 @@
   <!-- <script type="module" src="./assets/js/listeners.js"></script> -->
   
   <!-- La ruta del index.js puede ser ../dist/assets/js/index.js  o  ./assets/js/index.js-->
-  <script src="./assets/js/index.js"></script>
-
+  <script type="module" src="./assets/js/valorCarrito.js"></script>
+  
+  <script type="module" src="./assets/js/index.js"></script>
 
 
 </body>
