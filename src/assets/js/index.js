@@ -1,5 +1,6 @@
 //import { setListenerSidebarItems } from './listeners.js';
-import { mostrarCarrito } from './carrito.js';
+import { mostrarCarrito, mostrarProductos, mostrarEventos, mostrarBlog, mostrarContactos } from './carrito.js';
+import { Router } from './Router/router.js'
 
 let imgsCarousel;              // array imagenes carousel de la DB
 let categorias;                // array categorias de la DB
@@ -11,9 +12,35 @@ let productosShoppinCart = [];      // array productos comprados
 let nombreCategoria;
 
 var urlActual = window.location;
-console.log(urlActual);
+console.log("Url actual: " + urlActual);
 
 const BASEURL = "http://localhost:8000/";
+
+///////////////////////////// ROUTER ///////////////////////////
+const router = new Router();
+router.root = 'http://localhost:8088/nature/site';
+router.add({name: 'inicio', path: '/', handler: ()=>/* console.log("inicio selected")*/ recargarInicio() });
+router.add({name: 'productos', path: '/productos', handler: ()=> mostrarProductos() /* console.log('handler to productos') */});
+router.add({name: 'eventos', path: '/eventos', handler: ()=> mostrarEventos() /* console.log('handler to eventos') */});
+router.add({name: 'blog', path: '/blog', handler: ()=> mostrarBlog() /* console.log('handler to blog') */});
+router.add({name: 'contacto', path: '/contacto', handler: ()=> mostrarContactos() /* console.log('handler to contanto') */});
+router.add({name: 'carrito', path: '/carrito', handler: ()=> mostrarCarrito()});
+router.add({name: 'producto', path: '/productos/:id', handler: (params)=>console.log('handler to product/id: ' + params)});
+
+const activeRoutes = Array.from(document.querySelectorAll('[route]'));
+activeRoutes.forEach((route) => route.addEventListener('click', (e) => {
+    e.preventDefault();
+    router.navigate(e.target.getAttribute('route'))
+}, false));
+
+if (window.performance.navigation.type == 1) {
+    console.log("has refrescado el navegador");
+    //window.location="/prueba__router1";
+    //location.reload();
+    //window.history.replaceState(null, null, this.root);
+}
+
+///////////////////////// END ROUTER ///////////////////////////
 
 let peticionCarousel = $.ajax({
     url: BASEURL + "carousel",
@@ -89,6 +116,7 @@ function mostrarErrorByJson(json) {
 }
 
 function cargarPaginaInicio() {
+
     cargarCarousel();
     cargarCategorias();
     cargarProductos(nombreCategoria);
@@ -313,6 +341,13 @@ function cargarCartasProductos(num) {
     });
 }
 
+function recargarInicio() {
+    setTimeout(function () {
+        window.location.reload();
+    }, 200);
+    
+}
+
 function getDatosProducto(id) {
     let productoComprado;
     $.each(productos, function(index, elem) {
@@ -374,9 +409,6 @@ function setListenerButtonAddCarrito() {
 }
 
 //////////// END LISTENER BOTON AÑADIR CARRITO ////////////////
-<<<<<<< HEAD
-/////////////////// LISTENER //////////////////////////////////
-=======
 //////////////// LISTENER CHECKOUT CARRITO ////////////////////
 function setListenerButtonCheckoutCarrito() {
     $("#contenido-r").on("click", ".checkout", function() {
@@ -385,10 +417,9 @@ function setListenerButtonCheckoutCarrito() {
         if (productosShoppinCart != null) {
             productosShoppinCart = [];
         }
-        window.location ="/productos";
+        //window.location ="/productos";
     });
 }
->>>>>>> paco1
 
 
 ///////////// END LISTENER CHECKOUT CARRITO ////////////////////
@@ -423,20 +454,29 @@ function menuSelected(nombreItemMenu) {
 
     switch (nombreItemMenu) {
         case "Inicio":
-            console.log("Has seleccionado Inicio");
+            console.log("Has seleccionado Inicio-switch");
+        break;
+        case "Productos":
+            console.log("Has seleccionado Productos-switch");
+        break;
+        case "Eventos":
+            console.log("Has seleccionado Eventos-switch");
+        break;
+        case "Blog":
+            console.log("Has seleccionado Blog-switch");
         break;
         case "Contacto":
-            console.log("Has seleccionado Contacto");
+            console.log("Has seleccionado Contacto-switch");
         break;
-        case null:
-            console.log("Has seleccionado Carrito");
-            mostrarCarrito();
+        case "Compra":
+            console.log("Has seleccionado Carrito-switch");
+            //mostrarCarrito();
         break;
-        default: console.log("Te has equivocado");
+        default: console.log("Te has equivocado-switch");
     }
 }
 
-
+export { productosShoppinCart };
 
 
 

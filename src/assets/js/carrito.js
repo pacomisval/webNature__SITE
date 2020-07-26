@@ -1,6 +1,7 @@
 
-//import { } from './index.js';
+import { productosShoppinCart } from './index.js';
 
+let sumaProductos = 0;
 
 function mostrarCarrito() {
     $("#contenido-r").empty();
@@ -34,6 +35,14 @@ function mostrarCarrito() {
 
     // Todo esto va dentro de un bucle for
     $.each(productosShoppinCart, function(index, elem) {
+
+        let auxPrecio = parseFloat(elem.precio);
+        let auxCantidad = isNaN(parseInt(elem.cantidad));
+        console.log(auxPrecio);
+        console.log(auxCantidad);
+        
+        sumaProductos = sumaProductos + parseFloat(auxPrecio * 1);
+
         let producto = $("<div/>").addClass("product");
 
         let prImage = $("<div/>").addClass("product-image");
@@ -48,7 +57,7 @@ function mostrarCarrito() {
     
         let prPrecio = $("<div/>").addClass("product-price").text(elem.precio);
     
-        let prCantidad = $("<div/>").addClass("product-quantity").text(elem.cantidad);
+        let prCantidad = $("<div/>").addClass("product-quantity");
         let inputPrCantidad = $("<input>")
             .attr("type", "number")
             .attr("value", "1")
@@ -77,29 +86,34 @@ function mostrarCarrito() {
     
     // Hasta aqui el bucle for
 
+    let valorTax = 0.08;
+    let valorTransporte = 12;
+    let valorTotal = parseFloat(sumaProductos + valorTax + valorTransporte);
+    valorTotal = Math.trunc(valorTotal * 100) / 100; // esta linea formatea valorTotal a 2 decimales.
+
     let total = $("<div/>").addClass("totals");
 
     let totalItemSub = $("<div/>").addClass("totals-item");
     let labelSub = $("<label/>").addClass("totals-label").text("Subtotal");
-    let valueSub = $("<div/>").addClass("totals-value").attr("id", "cart-subtotal")/* .text("45.8 €") */;
+    let valueSub = $("<div/>").addClass("totals-value").attr("id", "cart-subtotal").text(sumaProductos);
     totalItemSub.append(labelSub);
     totalItemSub.append(valueSub);
 
     let totalItemTax = $("<div/>").addClass("totals-item");
     let labelTax = $("<label/>").addClass("totals-label").text("Tax (21%)");
-    let valueTax = $("<div/>").addClass("totals-value").attr("id", "cart-tax")/* .text("4.2 €") */;
+    let valueTax = $("<div/>").addClass("totals-value").attr("id", "cart-tax").text(valorTax);
     totalItemTax.append(labelTax);
     totalItemTax.append(valueTax);
 
     let totalItemTransporte = $("<div/>").addClass("totals-item");
     let labelTransporte = $("<label/>").addClass("totals-label").text("Gastos envio");
-    let valueTransporte = $("<div/>").addClass("totals-value").attr("id", "cart-shipping")/* .text("8.00 €") */;
+    let valueTransporte = $("<div/>").addClass("totals-value").attr("id", "cart-shipping").text(valorTransporte);
     totalItemTransporte.append(labelTransporte);
     totalItemTransporte.append(valueTransporte);
 
     let totalItemCompra = $("<div/>").addClass("totals-item").addClass("totals-item-total");
     let labelCompra = $("<label/>").addClass("totals-label").text("Valor Total");
-    let valueCompra = $("<div/>").addClass("totals-value").attr("id", "cart-total")/* .text("35.70 €") */;
+    let valueCompra = $("<div/>").addClass("totals-value").attr("id", "cart-total").text(valorTotal);
     totalItemCompra.append(labelCompra);
     totalItemCompra.append(valueCompra);
     
@@ -123,8 +137,47 @@ function mostrarCarrito() {
     $("#contenido-r").append(sectionCarrito);
 }
 
+function mostrarProductos() {
+    
+    $("#contenido-r").empty();
+    $("#contenido-l").empty();
+    $("#contenido-c").empty();
 
-export { mostrarCarrito };
+    console.log("Estas en mostrarProductos");
+    alert("Estas en mostrarProductos");
+}
+
+function mostrarEventos() {
+    
+    $("#contenido-r").empty();
+    $("#contenido-l").empty();
+    $("#contenido-c").empty();
+
+    console.log("Estas en mostrarEventos");
+    alert("Estas en mostrarEventos");
+}
+
+function mostrarBlog() {
+    
+    $("#contenido-r").empty();
+    $("#contenido-l").empty();
+    $("#contenido-c").empty();
+
+    console.log("Estas en mostrarBlog");
+    alert("Estas en mostrarBlog");
+}
+
+function mostrarContactos() {
+    
+    $("#contenido-r").empty();
+    $("#contenido-l").empty();
+    $("#contenido-c").empty();
+
+    console.log("Estas en mostrarContactos");
+    alert("Estas en mostrarContactos");
+}
+
+export { mostrarCarrito, mostrarProductos, mostrarEventos, mostrarBlog, mostrarContactos };
 
 
 
