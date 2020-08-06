@@ -1,6 +1,10 @@
 //import { setListenerSidebarItems } from './listeners.js';
-import { mostrarCarrito, mostrarProductos, mostrarEventos, mostrarBlog, mostrarContactos } from './carrito.js';
-import { Router } from './Router/router.js'
+import { mostrarCarrito, mostrarProductos, mostrarEventos, mostrarBlog, mostrarContactos } from './Carrito/carrito.js';
+import { Router } from './Router/router.js';
+import { Carrito } from './Carrito/classCarrito.js';
+import { Producto } from './Carrito/producto.js';
+
+
 
 let imgsCarousel;              // array imagenes carousel de la DB
 let categorias;                // array categorias de la DB
@@ -11,6 +15,23 @@ let productosShoppinCart = [];      // array productos comprados
 
 let nombreCategoria;
 
+let valorNatureT; 
+
+//let carrito = new Carrito();
+
+$(window).on("load", function() {
+    crearCookieT();
+
+    valorNatureT = leerCookie("natureT");
+    console.log("Valor de la cookie: ", valorNatureT);
+
+    
+	console.log("Funciona cookieT");
+})
+
+let misCookies = document.cookie;  // String con todas las cookies de esta página
+console.log("COOKIES: ", misCookies);
+
 var urlActual = window.location;
 console.log("Url actual: " + urlActual);
 
@@ -20,7 +41,7 @@ const BASEURL = "http://localhost:8000/";
 const router = new Router();
 router.root = 'http://localhost:8088/nature/site';
 router.add({name: 'inicio', path: '/', handler: ()=>/* console.log("inicio selected")*/ recargarInicio() });
-router.add({name: 'productos', path: '/productos', handler: ()=> mostrarProductos() /* console.log('handler to productos') */});
+router.add({name: 'tienda', path: '/tienda', handler: ()=> mostrarProductos() /* console.log('handler to productos') */});
 router.add({name: 'eventos', path: '/eventos', handler: ()=> mostrarEventos() /* console.log('handler to eventos') */});
 router.add({name: 'blog', path: '/blog', handler: ()=> mostrarBlog() /* console.log('handler to blog') */});
 router.add({name: 'contacto', path: '/contacto', handler: ()=> mostrarContactos() /* console.log('handler to contanto') */});
@@ -35,9 +56,6 @@ activeRoutes.forEach((route) => route.addEventListener('click', (e) => {
 
 if (window.performance.navigation.type == 1) {
     console.log("has refrescado el navegador");
-    //window.location="/prueba__router1";
-    //location.reload();
-    //window.history.replaceState(null, null, this.root);
 }
 
 ///////////////////////// END ROUTER ///////////////////////////
@@ -70,7 +88,7 @@ $(function() {
             console.log(categorias);
             productos = resProductos[0];
             console.log(productos);
-
+			
             let categoriasReady = false;
             let carouselReady = false;
             let productosReady = false;
@@ -101,8 +119,7 @@ $(function() {
  
             if (categoriasReady && carouselReady && productosReady) {
                 cargarPaginaInicio();
-            }
-
+            }		
         })
         .fail(function (xhr) {
             console.log("Error del servidor: " + xhr.status + "(" + xhr.statusText + ")");
@@ -125,6 +142,8 @@ function cargarPaginaInicio() {
     setListenerMenu();
     setListenerButtonAddCarrito();
     setListenerButtonCheckoutCarrito();
+
+    
 }
 
 function cargarCarousel() {
@@ -257,7 +276,7 @@ function cargarProductos(nombreCategoria) {
 
     if (nombreCategoria != null || nombreCategoria != undefined) {
         let contenidoWeb = $("<h1/>", {
-            class: "c-sidebar__title",
+            class: "c-card__title",
             text: categoriaName.toUpperCase()
         });
         $("#contenido-c").append(contenidoWeb);
@@ -271,7 +290,7 @@ function cargarProductos(nombreCategoria) {
     }
     else {
         let contenidoWeb = $("<h1/>", {
-            class: "c-sidebar__title",
+            class: "c-card__title",
             text: categoriaDefault.toUpperCase()
         });
         $("#contenido-c").append(contenidoWeb);
@@ -318,11 +337,10 @@ function cargarCartasProductos(num) {
             .addClass("c-card");
         let cardImage = $("<img>")
             .attr("src", "assets/images/productos/" + elem.foto)
-            .attr("style", "width: 60px")
             .addClass("c-card__image");
         let cardContent = $("<div/>").addClass("c-card__content");
-        let cardTitle = $("<h4/>").addClass("c-card__title").append(elem.nombre);
-        let cardPrice = $("<h2/>").addClass("c-card__price").append(elem.precio + " €");
+        let cardName = $("<h4/>").addClass("c-card__name").append(elem.nombre);
+        let cardPrice = $("<h3/>").addClass("c-card__price").append(elem.precio + " €");
         let cardButton = $("<div/>").addClass("c-card__button");
         let linkButton = $("<a/>")
             .attr("id", elem.id)
@@ -330,7 +348,7 @@ function cargarCartasProductos(num) {
             .append("Añadir al carrito");
 
         cardButton.append(linkButton);
-        cardContent.append(cardTitle);
+        cardContent.append(cardName);
         cardContent.append(cardPrice);
         componentCard.append(cardImage);
         componentCard.append(cardContent);
@@ -341,6 +359,55 @@ function cargarCartasProductos(num) {
     });
 }
 
+
+function crearCookieT() {
+    $.ajax({
+        url: BASEURL + "init",
+        type: "GET",
+        dataType: "json",
+		xhrFields: {
+			withCredentials: true
+		}
+    })
+    .done(response => {
+        console.log("Response crear cookie: " , response);
+		if (response != null || response != undefined) {
+            console.log("cookie: ", true);
+            //console.log("response.expire: ", respose.expires);
+			return true;
+		}
+		else {
+			console.log("cookie: ", false);
+			return false;
+		}
+    })
+    .fail(responseError => {
+        console.log("Error en comprobar cookie: " , responseError);
+    });
+}
+
+function leerCookie(cookie) {   
+    let cookieEncontrada;
+    let valorCookie = "";
+    let claveCookie;
+    let obtenerPosicionIgual;
+
+    let arrayCookies = misCookies.split(";");
+
+    $.each(arrayCookies, function(index, elem) {
+        cookieEncontrada = elem;
+        obtenerPosicionIgual = cookieEncontrada.indexOf("=");
+        claveCookie = cookieEncontrada.substring(0, obtenerPosicionIgual);
+
+        if (claveCookie == cookie) {
+            valorCookie = cookieEncontrada.substring(obtenerPosicionIgual + 1);
+        }
+    }); 
+    
+    return valorCookie;
+}
+
+// Este método hay que cambiarlo
 function recargarInicio() {
     setTimeout(function () {
         window.location.reload();
@@ -348,14 +415,17 @@ function recargarInicio() {
     
 }
 
-function getDatosProducto(id) {
+function pushArrayProductos(id) {
     let productoComprado;
+    let carrito = new Carrito(valorNatureT, productosShoppinCart)
     $.each(productos, function(index, elem) {
         if(elem.id == id) {
-            productoComprado = elem;
-            productosShoppinCart.push(elem);
+            productoComprado = new Producto(elem.id, elem.nombre, elem.descripcion, elem.precio, elem.idCategoria, elem.foto, elem.cantidad);
+            carrito.addProducto(productoComprado);
         }
     });
+    $(".shopping-cart-count").text(carrito.getTotalUnidadesProductosComprados());
+
     let nombre = productoComprado.nombre;
     let precio = productoComprado.precio;
     console.log(nombre);
@@ -371,7 +441,7 @@ function getDatosProducto(id) {
 function setListenerMenu() {
     $("#contenido-t").on("click", ".c-menu__link", function() {
         let nombreItemMenu = this.childNodes[0].nodeValue;
-        console.log(nombreItemMenu);
+        console.log("Has seleccionado item menu: ",nombreItemMenu);
         
         // Carga el elemento de menu seleccionado
         menuSelected(nombreItemMenu);
@@ -396,19 +466,22 @@ function setListenerSidebarItems() {
 }
 
 //////////////////// END LISTENER CATEGORIAS //////////////////
-/////////////// LISTENER BOTON AÑADIR CARRITO //////////////////
+//////////////////////////////////////////////////////////////////
+///////////// LISTENER BOTON AÑADIR PRODUCTO AL CARRITO ////////
 function setListenerButtonAddCarrito() {
+
     $("#contenido-c").on("click", ".c-card__link-add", function() {
+
         var idProducto = this.id;
         console.log("Producto con id: " + idProducto);
 
-        // Obtiene los datos del producto, como nombre, precio, etc... .
-        getDatosProducto(idProducto);
-        
+        // Llena el array de productos comprados.
+        pushArrayProductos(idProducto);
     }); 
 }
-
+ 
 //////////// END LISTENER BOTON AÑADIR CARRITO ////////////////
+//////////////////////////////////////////////////////////////
 //////////////// LISTENER CHECKOUT CARRITO ////////////////////
 function setListenerButtonCheckoutCarrito() {
     $("#contenido-r").on("click", ".checkout", function() {
@@ -422,12 +495,10 @@ function setListenerButtonCheckoutCarrito() {
 }
 
 
-///////////// END LISTENER CHECKOUT CARRITO ////////////////////
+///////////// END LISTENER CHECKOUT CARRITO ///////////////////
 
 
-//////////////////// END LISTENER ////////////////////////////
-
-///////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////
 ///////////////// END LISTENERS //////////////////////////////
 
 function productosByIdCategoria(idCategoria, nombreCategoria) {
@@ -456,7 +527,7 @@ function menuSelected(nombreItemMenu) {
         case "Inicio":
             console.log("Has seleccionado Inicio-switch");
         break;
-        case "Productos":
+        case "Tienda":
             console.log("Has seleccionado Productos-switch");
         break;
         case "Eventos":
@@ -476,7 +547,7 @@ function menuSelected(nombreItemMenu) {
     }
 }
 
-export { productosShoppinCart };
+export { productosShoppinCart, valorNatureT };
 
 
 

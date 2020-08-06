@@ -2,20 +2,27 @@
 
 
     
-    &__menu {
-        //position: fixed;
-        //margin-bottom: 20px;
+    &__top {
+        background-color: pink;
+        margin-left: -20px;      // corregir este fallo, position fixed pone 20px left y 20px right.
+        width: 1690px;
+        height: 150px;
+        position: fixed;
+        z-index: 100;
     }
 
-    &--light {
-        //@function: 20px;
+    &__center {
+       width: 1170px;
+       margin: 0 auto;
+       padding-top: 160px;
     }
 
-    &__content {
-
+    &__bottom {
+        background-color: #aaa;
+        width: 1690px;             // corregir este fallo
+        height: 200px;
+        margin-left: -15px;      // corregir este fallo
+        
     }
 
-    &__footer {
-        background-color: #ddd;
-    }
 }

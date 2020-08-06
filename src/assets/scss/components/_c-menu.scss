@@ -1,9 +1,13 @@
 .c-menu {
-    background-color: pink;
     margin-top: 25px;
 
+
+    &__img {
+        padding-left: 75px;
+    }
+
     &__link:first-child {
-        padding-left: 70px;
+        padding-left: 150px;
     }
 
     &__link {
@@ -20,7 +24,7 @@
     }
 
     &__search {
-        margin-left: 560px;
+        margin-left: 780px;
     }
 }
 

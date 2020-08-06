@@ -1,4 +1,5 @@
 // Abstracts
+@import './abstracts/mixins';
 
 // Base
 @import './base/reset';
@@ -8,6 +9,7 @@
 @import './layouts/l-page';
 @import './layouts/l-menu';
 @import './layouts/l-columns';
+@import './layouts/l-content';
 
 // Components
 @import './components/c-card';

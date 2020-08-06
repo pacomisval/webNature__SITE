@@ -1,0 +1,22 @@
+.l-content {
+    display: grid;
+    gap: 25px;
+
+    grid-template-areas: 
+        "top top"
+        "left right";
+
+    grid-template-columns: .5fr 1.5fr;
+
+    &__top {
+        grid-area: top;
+    }
+
+    &__left {
+        grid-area: left;
+    }
+
+    &__right {
+        grid-area: right;
+    }
+}

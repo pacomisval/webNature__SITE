@@ -1,14 +1,24 @@
 
-import { productosShoppinCart } from './index.js';
+import { productosShoppinCart, valorNatureT } from './../index.js';
+import { Carrito } from './classCarrito.js';
+
 
 let sumaProductos = 0;
 
+
+
+setListenerButtonsCarritoCompra();
+
 function mostrarCarrito() {
+    let carrito = new Carrito(valorNatureT, productosShoppinCart);
     $("#contenido-r").empty();
     $("#contenido-l").empty();
     $("#contenido-c").empty();
 
-    let sectionCarrito = $("<div/>").addClass("section-carrito");
+    let sectionCarrito = $("<div/>")
+        .addClass("section-carrito")
+        .attr("id", "section-carrito");
+
     let carritoTitle = $("<div/>").addClass("carrito__title");
     let contenidocarrito = $("<h1/>", {
         class: "c-sidebar__title",
@@ -60,18 +70,22 @@ function mostrarCarrito() {
         let prCantidad = $("<div/>").addClass("product-quantity");
         let inputPrCantidad = $("<input>")
             .attr("type", "number")
-            .attr("value", "1")
+            .attr("value", elem.cantidad)
             .attr("min", "1")
+            .addClass("input-quantity")
+            .attr("id", elem.id)
             .attr("style","width: 50px");
         prCantidad.append(inputPrCantidad);
         
         let prEliminar = $("<div/>").addClass("product-removal");
-        let botonPrEliminar = $("<button/>").addClass("remove-product");
+        let botonPrEliminar = $("<button/>")
+            .addClass("remove-product")
+            .attr("id", elem.id);
         let iconoPrEliminar = $("<i/>").addClass("fas fa-trash-alt");
         botonPrEliminar.append(iconoPrEliminar);
         prEliminar.append(botonPrEliminar);
     
-        let prTotal = $("<div/>").addClass("product-line-price").text(elem.precio);
+        let prTotal = $("<div/>").addClass("product-line-price").text(carrito.getValorProducto(this.id));
     
         producto.append(prImage);
         producto.append(prDetalle);
@@ -86,34 +100,37 @@ function mostrarCarrito() {
     
     // Hasta aqui el bucle for
 
-    let valorTax = 0.08;
-    let valorTransporte = 12;
-    let valorTotal = parseFloat(sumaProductos + valorTax + valorTransporte);
-    valorTotal = Math.trunc(valorTotal * 100) / 100; // esta linea formatea valorTotal a 2 decimales.
+    //let valorTax = 0.21;
+    // let valorTransporte = 12;
+    //let valorSumaTax = (sumaProductos * valorTax);
+    //valorSumaTax = Math.trunc(valorSumaTax * 100) / 100; // esta linea formatea valorSumaTax a 2 decimales.
+    //let valorTotal = parseFloat(sumaProductos + valorSumaTax + valorTransporte);
+    //valorTotal = Math.trunc(valorTotal * 100) / 100; // esta linea formatea valorTotal a 2 decimales.
+    $(".shopping-cart-count").text(carrito.getTotalUnidadesProductosComprados());
 
     let total = $("<div/>").addClass("totals");
 
     let totalItemSub = $("<div/>").addClass("totals-item");
     let labelSub = $("<label/>").addClass("totals-label").text("Subtotal");
-    let valueSub = $("<div/>").addClass("totals-value").attr("id", "cart-subtotal").text(sumaProductos);
+    let valueSub = $("<div/>").addClass("totals-value").attr("id", "cart-subtotal").text(carrito.getSubTotal());
     totalItemSub.append(labelSub);
     totalItemSub.append(valueSub);
 
     let totalItemTax = $("<div/>").addClass("totals-item");
     let labelTax = $("<label/>").addClass("totals-label").text("Tax (21%)");
-    let valueTax = $("<div/>").addClass("totals-value").attr("id", "cart-tax").text(valorTax);
+    let valueTax = $("<div/>").addClass("totals-value").attr("id", "cart-tax").text(carrito.getValorTax());
     totalItemTax.append(labelTax);
     totalItemTax.append(valueTax);
 
     let totalItemTransporte = $("<div/>").addClass("totals-item");
     let labelTransporte = $("<label/>").addClass("totals-label").text("Gastos envio");
-    let valueTransporte = $("<div/>").addClass("totals-value").attr("id", "cart-shipping").text(valorTransporte);
+    let valueTransporte = $("<div/>").addClass("totals-value").attr("id", "cart-shipping").text(carrito.getValorTransporte(carrito.getValorTotaCompra()));
     totalItemTransporte.append(labelTransporte);
     totalItemTransporte.append(valueTransporte);
 
     let totalItemCompra = $("<div/>").addClass("totals-item").addClass("totals-item-total");
     let labelCompra = $("<label/>").addClass("totals-label").text("Valor Total");
-    let valueCompra = $("<div/>").addClass("totals-value").attr("id", "cart-total").text(valorTotal);
+    let valueCompra = $("<div/>").addClass("totals-value").attr("id", "cart-total").text(carrito.getValorTotaCompra());
     totalItemCompra.append(labelCompra);
     totalItemCompra.append(valueCompra);
     
@@ -137,6 +154,32 @@ function mostrarCarrito() {
     $("#contenido-r").append(sectionCarrito);
 }
 
+/////////////////////                           ///////////////
+
+function setListenerButtonsCarritoCompra() {
+    
+
+    $("#contenido-r").on("click", ".remove-product", function() {
+        let carrito = new Carrito(valorNatureT, productosShoppinCart);
+        carrito.deleteProducto(this.id);
+        mostrarCarrito();
+        
+        console.log("Has hecho click en deleteProductoCarrito: ", this.id);
+    });
+
+    $("#contenido-r").on("change", ".input-quantity", function() {
+        let carrito = new Carrito(valorNatureT, productosShoppinCart);
+        let valueInput = $(this).val();
+        console.log(this.id + ": valor de input number: ", valueInput);
+        carrito.actualizarProductosShoppingCart(this.id, valueInput);
+
+        mostrarCarrito();
+    });
+}
+
+/////////////////////////////////////////////////////////////////
+
+
 function mostrarProductos() {
     
     $("#contenido-r").empty();
@@ -146,6 +189,7 @@ function mostrarProductos() {
     console.log("Estas en mostrarProductos");
     alert("Estas en mostrarProductos");
 }
+
 
 function mostrarEventos() {
     
