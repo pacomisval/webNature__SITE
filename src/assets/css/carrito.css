@@ -60,7 +60,7 @@
    
   /* Body/Header stuff */
   body {
-    padding: 0px 30px 30px 20px;
+    /* //padding: 0px 0px 30px 0px; */
     font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight: 100;
   }

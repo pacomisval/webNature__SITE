@@ -11,121 +11,61 @@
 
     <title>Web Nature</title>
 </head>
-<!-- <body>
-  <div class="l-page">
-    <div class="l-page__top" id="contenido-t">
-    
-      <div class="c-section">
-        <div class="c-section__menu">
-          <div class="l-menu">
-              <div class="l-menu__logo">
-                  <img src="assets/images/logo/logo10.png" alt="" height="150">
-              </div>
-              <div class="l-menu__top">
-                  <ol class="c-menu">               
-                      <input type="text" placeholder="Buscar" class="c-menu__search">
-                  </ol>
-              </div>
-              <div class="l-menu__bottom">
-                  <ol class="c-menu">
-                      <a href="" route="/" class="c-menu__link" id="inicio-m">Inicio</a>
-                      <a href="" route="/productos" class="c-menu__link" id="productos-m">Productos</a>
-                      <a href="" route="/eventos" class="c-menu__link" id="eventos-m">Eventos</a>
-                      <a href="" route="/blog" class="c-menu__link" id="blog-m">Blog</a>
-                      <a href="" route="/contacto" class="c-menu__link" id="contacto-m">Contacto</a>
-                      <a href="" route="/carrito" class="c-menu__link" id="carrito-m"><i class="fas fa-shopping-cart"> (<span class="shopping-cart-count"></span>) </i> Compra</a>        
-                  </ol>
-                 
-              </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="l-page__right" id="contenido-r">
-   
-    </div>
-
-    <div class="l-page__left">
-      <div class="c-sidebar c-sidebar@movil" id="contenido-l">
-
-      </div>
-    </div>
-    
-    <div class="l-page__center" id="contenido-c">
-      
-    </div>
-
-    <div class="l-page__bottom">
-  
-      <div class="l-columns">
-        <div class="l-columns__area">
-          <div class="c-section__footer">
-            <div class="l-columns">
-              <div class="l-columns__area--left">
-                <ul class="c-list">
-                  <li class="c-list__title">Siguenos</li>
-                  <li class="c-list__option">Facebook</li>
-                  <li class="c-list__option">Twitter</li>
-                  <li class="c-list__option">Instagram</li>
-                </ul>
-              </div>
-              <div class="l-columns__area--right">
-                <ul class="c-list">
-                  <li class="c-list__title">Contacto</li>
-                  <li class="c-list__option">Dirección: C/ Nature Nº 8</li>
-                  <li class="c-list__option">Email: tiendanature@gmail.com</li>
-                  <li class="c-list__option">Telefono: 963458690</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    
-    </div>
-  </div>
-
-  <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
-  
-  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
-  
-  
-  <script type="module" src="./assets/js/Router/router.js"></script>
-  
-  <script type="module" src="./assets/js/index.js"></script>
-
-
-</body> -->
-
 <body>
   <div class="l-page">
-      <div class="l-page__top">
-          <div class="c-section">
-              <div class="c-section__top"  id="contenido-t">
-                  <div class="l-menu">
-                      <div class="l-menu__logo">
-                          <img src="assets/images/logo/logo10.png" alt="" class="c-menu__img" height="150">
-                      </div>
-                      <div class="l-menu__top">
-                          <ol class="c-menu">               
-                              <input type="text" placeholder="Buscar" class="c-menu__search">
-                          </ol>
-                      </div>
-                      <div class="l-menu__bottom">
-                          <ol class="c-menu">
-                              <a href="" route="/" class="c-menu__link" id="inicio-m">Inicio</a>
-                              <a href="" route="/tienda" class="c-menu__link" id="productos-m">Tienda</a>
-                              <a href="" route="/eventos" class="c-menu__link" id="eventos-m">Eventos</a>
-                              <a href="" route="/blog" class="c-menu__link" id="blog-m">Blog</a>
-                              <a href="" route="/contacto" class="c-menu__link" id="contacto-m">Contacto</a>
-                              <a href="" route="/carrito" class="c-menu__link" id="carrito-m"><i class="fas fa-shopping-cart"> (<span class="shopping-cart-count"></span>) </i> Compra</a>        
-                          </ol>
-                      </div>
-                  </div>
-              </div>
-          </div>            
+    <div class="l-page__top">
+        <div class="c-section">
+            <div class="c-section__top"  id="contenido-t">
+                <div class="l-menu">
+                    <div class="l-menu__logo">
+                        <img src="./assets/images/logo/logo10.png" alt="" height="150">
+                    </div>
+                    <div class="l-menu__top">
+                        <ol>               
+                            <input type="text" placeholder="Buscar" class="c-menu__search">
+                        </ol>
+                    </div>
+                    <div class="l-menu__bottom ">
+                        <div class="c-menu">
+                            <ol class="c-menu__nav">
+                                <a href="" route="/" class="c-menu__link">Inicio</a>
+                                <a href="#" route="/tienda" class="c-menu__link">Tienda</a>
+                                <a href="#" route="/eventos" class="c-menu__link">Eventos</a>
+                                <a href="#" route="/blog" class="c-menu__link">Blog</a>
+                                <a href="#" route="/contacto" class="c-menu__link">Contacto</a>
+                                <a href="#" class="c-menu__link" style="display: none;">Carrito</a>
+                            </ol>
+                            <div class="dropdown c-menu__minicart">
+                                <i class="fas fa-shopping-cart dropdown-toggle c-menu__link c-menu__count" data-toggle="dropdown"> (0) </i>
+                                <div class="dropdown-menu c-menu__content">
+                                    <table>
+                                        <tbody class="c-menu__tbody">
+                                            <!-- <tr>
+                                                <th class="c-menu__tbody-title">Imagen</th>													
+                                                <th class="c-menu__tbody-title">Nombre</th>														
+                                                <th class="c-menu__tbody-title">Unidades</th>														
+                                                <th class="c-menu__tbody-title">Precio</th>														
+                                            </tr>
+                                            <tr class="c-menu__products">
+                                                												
+                                            </tr> -->
+                                        </tbody>
+                                    </table>					
+                                    <div class="c-menu__footer">
+                                        <h3 class="text-right">Subtotal: <span class="cart-amount">0,00 € &nbsp;</span></h3>
+                                        <div class="c-menu__button">
+                                            <a href="#" route="/carrito" class="c-menu__button-link" title="Ir al carrito">
+                                                <i class="fa fa-shopping-cart"></i> IR AL CARRITO
+                                            </a>
+                                        </div>											
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>	
+        </div>		
       </div>
       <div class="l-page__center">
           <div class="c-section">

@@ -36,11 +36,11 @@ export class Carrito {
      * Añade un producto al array de productos comprados del carrito.
      */
     addProducto(producto) {
-        console.log("addProducto: añadimos este producto " , producto , " a este carrito " , this);
+        //console.log("addProducto: añadimos este producto " , producto , " a este carrito " , this);
     
         let productoPresente = this.arrayProductosComprados.find(s => parseInt(s.id) == parseInt(producto.id));
 
-        if (productoPresente == null) {
+        if (productoPresente == null || productoPresente == undefined) {
             // Para evitar el bug del drag and drop
             if (producto.cantidad == null) {
                 producto.cantidad = 1;
@@ -123,11 +123,11 @@ export class Carrito {
 
     getTotalUnidadesProductosComprados() {
         let unidades = 0;
-
+        console.log("ArrayProductosComprados: ", this.arrayProductosComprados);
         $.each(this.arrayProductosComprados, (index, elem) => {
-            unidades = parseInt(unidades + elem.cantidad);
+            unidades = parseInt(unidades) + parseInt(elem.cantidad);
         });
-
+        console.log("Valor de unidades: ", parseInt(unidades));
         return unidades;
     }
 
@@ -183,7 +183,7 @@ export class Carrito {
         sumaTax = parseFloat(sumaPrecioProductos * tax);
         precioTotal = parseFloat(sumaPrecioProductos + sumaTax);
 
-        if(precioTotal >= 100) {
+        if(precioTotal >= 100 || precioTotal === 0) {
             transporte = 0;
         }
         else {
@@ -206,6 +206,10 @@ export class Carrito {
         sumaTax = parseFloat(sumaPrecioProductos * tax);
         precioTotal = parseFloat(sumaPrecioProductos + sumaTax + transporte);
 
+        if(sumaPrecioProductos === 0) {
+            return precioTotal = 0;
+        }
+
         if(precioTotal >= 112) {
             precioTotal = precioTotal - transporte;
         }
@@ -217,7 +221,7 @@ export class Carrito {
         return precioTotal.toFixed(2);
     }
 
-    actualizarProductosShoppingCart(id, valor) {
+    actualizarCantidadProductosShoppingCart(id, valor) {
         
         $.each(this.arrayProductosComprados, (index, elem) => {
             if(elem.id == id) {
@@ -228,13 +232,13 @@ export class Carrito {
         //this.actualizaTotales(id);       
     }
 
-    actualizaTotales(id) {
-        this.getValorProducto(id);
-        this.getSubTotal();
-        this.getValorTax();
-        this.getValorTransporte();
-        this.getValorTotaCompra();
-    }
+    // actualizaTotales(id) {
+    //     this.getValorProducto(id);
+    //     this.getSubTotal();
+    //     this.getValorTax();
+    //     this.getValorTransporte();
+    //     this.getValorTotaCompra();
+    // }
 
     clearArrayProductosComprados() {
         this.arrayProductosComprados = [];

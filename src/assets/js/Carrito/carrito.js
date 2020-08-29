@@ -2,14 +2,11 @@
 import { productosShoppinCart, valorNatureT } from './../index.js';
 import { Carrito } from './classCarrito.js';
 
-
 let sumaProductos = 0;
 
-
-
-setListenerButtonsCarritoCompra();
-
 function mostrarCarrito() {
+    $('.dropdown-menu').hide()
+
     let carrito = new Carrito(valorNatureT, productosShoppinCart);
     $("#contenido-r").empty();
     $("#contenido-l").empty();
@@ -100,12 +97,9 @@ function mostrarCarrito() {
     
     // Hasta aqui el bucle for
 
-    //let valorTax = 0.21;
-    // let valorTransporte = 12;
-    //let valorSumaTax = (sumaProductos * valorTax);
-    //valorSumaTax = Math.trunc(valorSumaTax * 100) / 100; // esta linea formatea valorSumaTax a 2 decimales.
-    //let valorTotal = parseFloat(sumaProductos + valorSumaTax + valorTransporte);
-    //valorTotal = Math.trunc(valorTotal * 100) / 100; // esta linea formatea valorTotal a 2 decimales.
+    // llamada al listener que controla los botones del carrito de la compra.
+    setListenerButtonsCarritoCompra();
+
     $(".shopping-cart-count").text(carrito.getTotalUnidadesProductosComprados());
 
     let total = $("<div/>").addClass("totals");
@@ -141,11 +135,16 @@ function mostrarCarrito() {
 
     sectionCarrito.append(total);
 
-    let botonSeguirComprando = $("<button/>").addClass("seguirComprando");
+    let botonSeguirComprando = $("<button/>")
+        .addClass("seguirComprando")
+        .attr("id", "seguirComprando");
     let iconSeguirComprando = $("<i/>").addClass("fas fa-shopping-cart").text(" Seguir comprando");
     botonSeguirComprando.append(iconSeguirComprando);
 
-    let botonCheckout = $("<button/>").addClass("checkout").text("Checkout  ");
+    let botonCheckout = $("<button/>")
+        .attr("id", "checkout")
+        .addClass("checkout")
+        .text("Checkout ");
     let iconCheckout = $("<i/>").addClass("fas fa-play");
     botonCheckout.append(iconCheckout);
 
@@ -157,7 +156,7 @@ function mostrarCarrito() {
 /////////////////////                           ///////////////
 
 function setListenerButtonsCarritoCompra() {
-    
+    let ok = true;
 
     $("#contenido-r").on("click", ".remove-product", function() {
         let carrito = new Carrito(valorNatureT, productosShoppinCart);
@@ -171,13 +170,46 @@ function setListenerButtonsCarritoCompra() {
         let carrito = new Carrito(valorNatureT, productosShoppinCart);
         let valueInput = $(this).val();
         console.log(this.id + ": valor de input number: ", valueInput);
-        carrito.actualizarProductosShoppingCart(this.id, valueInput);
+        carrito.actualizarCantidadProductosShoppingCart(this.id, valueInput);
 
         mostrarCarrito();
     });
+
+    $("#contenido-r").on("click", ".checkout", function() {
+        console.log("Click en formalizar compra: Checkout");
+        ok = false;
+    });
+
+    $("#contenido-r").on("click", ".seguirComprando", function() {
+        console.log("Click en seguir comprando: ");
+        //ok = false;
+        
+    });
+
+    // if(ok) {
+    //     guardarCarritoPendienteLocalStorage();
+    //     console.log("Guardo el carritoPendiente: ");
+    // }
+    // else {
+    //     eliminarCarritoPendienteLocalStorage();
+    //     console.log("Elimino el carritoPendiente: ");
+    //}
 }
 
 /////////////////////////////////////////////////////////////////
+
+// function guardarCarritoPendienteLocalStorage() {
+//     // Almacena en localStorage el array de productos comprados.
+//     localStorage.setItem("carritoPendiente", JSON.stringify(productosShoppinCart));
+
+//     let carritoDeVuelta = localStorage.getItem("carritoPendiente");
+//     console.log("valor de carrito de vuelta: ", JSON.parse(carritoDeVuelta));
+// }
+
+// function eliminarCarritoPendienteLocalStorage() {
+//     localStorage.removeItem("carritoPendiente");
+//     console.log("He eliminado el carritoPendiente");
+// }
 
 
 function mostrarProductos() {

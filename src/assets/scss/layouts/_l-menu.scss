@@ -1,9 +1,12 @@
 .l-menu {
     display: grid;
+	width: 1170px;
+    margin: 0 auto;
 
     grid-template-areas: 
         "logo top"
         "logo bottom";
+        
 
     grid-template-columns: .3fr 1.7fr;
 

@@ -4,8 +4,8 @@
     
     &__top {
         background-color: pink;
-        margin-left: -20px;      // corregir este fallo, position fixed pone 20px left y 20px right.
-        width: 1690px;
+        //margin-left: -20px;      // corregir este fallo, position fixed pone 20px left y 20px right.
+        width: 1663px;
         height: 150px;
         position: fixed;
         z-index: 100;
@@ -19,9 +19,9 @@
 
     &__bottom {
         background-color: #aaa;
-        width: 1690px;             // corregir este fallo
+        width: 1663px;             // corregir este fallo
         height: 200px;
-        margin-left: -15px;      // corregir este fallo
+        //margin-left: -15px;      // corregir este fallo
         
     }
 

@@ -1,13 +1,56 @@
 .c-menu {
-    margin-top: 25px;
+    display: flex;
+    
 
-
-    &__img {
-        padding-left: 75px;
+    &__nav {
+        margin: 20px 0px 0px 100px;
     }
 
-    &__link:first-child {
-        padding-left: 150px;
+    &__count {
+      
+    }
+
+    &__minicart {
+        
+    }
+
+    &__content {
+        margin-left: -450px; 
+        margin-top: 16px; 
+    }
+
+
+    &__footer {
+
+    }
+
+    &__button {
+        width: 200px;
+        padding: 5px 30px; 
+        border: 1px solid tomato; 
+        border-radius: 3px;
+        background-color: pink;
+        
+        margin-top: 30px; 
+        margin-left: auto;
+        margin-right: auto; 
+    }
+
+    &__button-link {
+        text-decoration: none;
+        color: white;
+    }
+    &__button-link:hover {
+        text-decoration: none;
+        color: #888;
+    }
+
+    &__tbody {
+        
+
+        &-title {
+            padding: 0 40px;
+        }
     }
 
     &__link {
@@ -24,7 +67,8 @@
     }
 
     &__search {
-        margin-left: 780px;
+        margin-left: 615px;
+        margin-top: 25px; 
     }
 }
 

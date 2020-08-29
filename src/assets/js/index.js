@@ -17,20 +17,36 @@ let nombreCategoria;
 
 let valorNatureT; 
 
-//let carrito = new Carrito();
+let misCookies = document.cookie;  // String con todas las cookies de esta página
 
 $(window).on("load", function() {
-    crearCookieT();
 
-    valorNatureT = leerCookie("natureT");
-    console.log("Valor de la cookie: ", valorNatureT);
+    console.log("COOKIES: ", misCookies);
 
-    
-	console.log("Funciona cookieT");
-})
+    if(misCookies) {
+        console.log("Hay cookies en miscookies: ", misCookies);
+        let boolnatureT = leerCookie("natureT");
+        console.log("Existe cookie natureT?: ", boolnatureT);
+        if(boolnatureT) {
+            // Debe existir la cookie NatureT y eso es que existen productos en el localStorage.
+            productosShoppinCart = JSON.parse(localStorage.getItem("carritoPendiente"));
+            let carrito = new Carrito(valorNatureT, productosShoppinCart);
+            let count = carrito.getTotalUnidadesProductosComprados();
+            $(".c-menu__count").text(" (" + parseInt(count) + ")");
+        }
+        else {
+            console.log("No existe la cookie natureT");
+            localStorage.removeItem("carritoPendiente");
+            crearCookieT();
+        }
+    }
+    else {
+        console.log("No existe ninguna cookie");
+        localStorage.removeItem("carritoPendiente");
+        crearCookieT();
+    }
+});
 
-let misCookies = document.cookie;  // String con todas las cookies de esta página
-console.log("COOKIES: ", misCookies);
 
 var urlActual = window.location;
 console.log("Url actual: " + urlActual);
@@ -46,6 +62,7 @@ router.add({name: 'eventos', path: '/eventos', handler: ()=> mostrarEventos() /*
 router.add({name: 'blog', path: '/blog', handler: ()=> mostrarBlog() /* console.log('handler to blog') */});
 router.add({name: 'contacto', path: '/contacto', handler: ()=> mostrarContactos() /* console.log('handler to contanto') */});
 router.add({name: 'carrito', path: '/carrito', handler: ()=> mostrarCarrito()});
+// router.add({name: 'minicart', path: '/minicart', handler: ()=> mostrarTablaMinicart()});
 router.add({name: 'producto', path: '/productos/:id', handler: (params)=>console.log('handler to product/id: ' + params)});
 
 const activeRoutes = Array.from(document.querySelectorAll('[route]'));
@@ -141,7 +158,7 @@ function cargarPaginaInicio() {
     setListenerSidebarItems();
     setListenerMenu();
     setListenerButtonAddCarrito();
-    setListenerButtonCheckoutCarrito();
+    setListenerMostrarMinicart();
 
     
 }
@@ -373,7 +390,6 @@ function crearCookieT() {
         console.log("Response crear cookie: " , response);
 		if (response != null || response != undefined) {
             console.log("cookie: ", true);
-            //console.log("response.expire: ", respose.expires);
 			return true;
 		}
 		else {
@@ -391,19 +407,28 @@ function leerCookie(cookie) {
     let valorCookie = "";
     let claveCookie;
     let obtenerPosicionIgual;
-
-    let arrayCookies = misCookies.split(";");
-
-    $.each(arrayCookies, function(index, elem) {
-        cookieEncontrada = elem;
-        obtenerPosicionIgual = cookieEncontrada.indexOf("=");
-        claveCookie = cookieEncontrada.substring(0, obtenerPosicionIgual);
-
-        if (claveCookie == cookie) {
-            valorCookie = cookieEncontrada.substring(obtenerPosicionIgual + 1);
-        }
-    }); 
+    console.log("Valor de mis cookies: ", misCookies);
     
+
+    if(misCookies !== null || misCookies !== undefined) {
+        let arrayCookies = misCookies.split(";");
+
+        $.each(arrayCookies, function(index, elem) {
+            cookieEncontrada = elem;
+            obtenerPosicionIgual = cookieEncontrada.indexOf("=");
+            claveCookie = cookieEncontrada.substring(0, obtenerPosicionIgual);
+    
+            if (claveCookie == cookie) {
+                //valorCookie = cookieEncontrada.substring(obtenerPosicionIgual + 1);
+                valorCookie = true;
+            }
+            else {
+                //valorCookie = "no se ha encontrado valor de cookie natureT";
+                valorCookie = false;
+            }
+        });
+    }
+
     return valorCookie;
 }
 
@@ -417,20 +442,20 @@ function recargarInicio() {
 
 function pushArrayProductos(id) {
     let productoComprado;
-    let carrito = new Carrito(valorNatureT, productosShoppinCart)
+    let carrito = new Carrito(valorNatureT, productosShoppinCart);
     $.each(productos, function(index, elem) {
         if(elem.id == id) {
             productoComprado = new Producto(elem.id, elem.nombre, elem.descripcion, elem.precio, elem.idCategoria, elem.foto, elem.cantidad);
             carrito.addProducto(productoComprado);
         }
     });
-    $(".shopping-cart-count").text(carrito.getTotalUnidadesProductosComprados());
+    let count = carrito.getTotalUnidadesProductosComprados();
+    $(".c-menu__count").text(" (" + parseInt(count) + ")");
 
     let nombre = productoComprado.nombre;
     let precio = productoComprado.precio;
     console.log(nombre);
     console.log(precio);
-    console.log(productosShoppinCart);
 
     return productoComprado;
 } 
@@ -442,9 +467,7 @@ function setListenerMenu() {
     $("#contenido-t").on("click", ".c-menu__link", function() {
         let nombreItemMenu = this.childNodes[0].nodeValue;
         console.log("Has seleccionado item menu: ",nombreItemMenu);
-        
-        // Carga el elemento de menu seleccionado
-        menuSelected(nombreItemMenu);
+
     });
 }
 
@@ -476,30 +499,129 @@ function setListenerButtonAddCarrito() {
         console.log("Producto con id: " + idProducto);
 
         // Llena el array de productos comprados.
-        pushArrayProductos(idProducto);
+        let carritoPendiente = pushArrayProductos(idProducto);
+        console.log("carritoPendiente: ",carritoPendiente);
+
+        guardarCarritoPendienteLocalStorage();
+   
     }); 
 }
  
 //////////// END LISTENER BOTON AÑADIR CARRITO ////////////////
-//////////////////////////////////////////////////////////////
-//////////////// LISTENER CHECKOUT CARRITO ////////////////////
-function setListenerButtonCheckoutCarrito() {
-    $("#contenido-r").on("click", ".checkout", function() {
-        console.log("Factura de compra enviada a sistema de cobro, pendiente de confirmación");
+//////////// LISTERNER MOSTRAR MINICART ////////////////////////
+function setListenerMostrarMinicart() {
+    let count = 0;
+    let result;
+    let num;
+    let num2;
 
-        if (productosShoppinCart != null) {
-            productosShoppinCart = [];
+    $('.dropdown').mouseover(function(){
+        if (count == 0) {
+            if(productosShoppinCart != null) {
+                num = productosShoppinCart.length;
+                console.log("valor de num: ", num);
+            }
+            else {
+                num = 0;
+            }      
+            $('.dropdown-menu').hide();
+            $(".dropdown-menu").show();
+            result = mostrarTablaMinicart(productosShoppinCart);
+
         }
-        //window.location ="/productos";
+        else {
+            if(productosShoppinCart != null) {
+                num2 = productosShoppinCart.length;
+                console.log("valor de num2: ", num2);
+            }
+            else {
+                num2 = 0;
+            }
+            $('.dropdown-menu').hide();
+            $(".dropdown-menu").show();
+            result;
+
+            $("#contenido-t").on("click", "c-menu__button-link", function() {
+                $('.dropdown-menu').hide();
+            });
+        }
+        count ++;
     });
+    $('.dropdown').mouseout(function() {
+        setTimeout(function() {
+            
+            $('.dropdown-menu').hide();
+        }, 3500);
+    });
+
+    
 }
 
-
-///////////// END LISTENER CHECKOUT CARRITO ///////////////////
-
+///////////// END MOSTRAR MINICART ////////////////////////////
 
 /////////////////////////////////////////////////////////////////
 ///////////////// END LISTENERS //////////////////////////////
+function guardarCarritoPendienteLocalStorage() {
+    // Almacena en localStorage el array de productos comprados.
+    localStorage.setItem("carritoPendiente", JSON.stringify(productosShoppinCart));
+
+    let carritoDeVuelta = localStorage.getItem("carritoPendiente");
+    console.log("valor de carrito de vuelta: ", JSON.parse(carritoDeVuelta));
+}
+
+function eliminarCarritoPendienteLocalStorage() {
+    localStorage.removeItem("carritoPendiente");
+    console.log("He eliminado el carritoPendiente");
+}
+
+
+function mostrarTablaMinicart(productosShoppinCart) {
+    let tbody;
+
+    let fila = $("<tr/>");
+    let elementoImg = $("<th/>").addClass("c-menu__tbody-title").text("Imagen");
+    let elementoNom = $("<th/>").addClass("c-menu__tbody-title").text("Nombre");
+    let elementoUni = $("<th/>").addClass("c-menu__tbody-title").text("Unidades");
+    let elementoPre = $("<th/>").addClass("c-menu__tbody-title").text("Precio");
+
+    fila.append(elementoImg);
+    fila.append(elementoNom);
+    fila.append(elementoUni);
+    fila.append(elementoPre);
+
+    tbody = $(".c-menu__tbody").append(fila);
+
+    let carrito = new Carrito(valorNatureT, productosShoppinCart);
+    let arrayProductosComprados = carrito.getProductosComprados();
+    console.log("Productos comprados: ", arrayProductosComprados);
+
+    $.each(arrayProductosComprados, function(index, elem) {
+        let fila1 = $("<tr/>");
+        let elemImg = $("<td/>");
+        let img = $("<img>").attr("src","assets/images/productos/" + elem.foto).attr("style", "width: 70px");
+        let elemNom = $("<td/>").text(elem.nombre);
+        let elemUni = $("<td/>").addClass("c-menu__tbody-title").text(elem.cantidad);
+        let elemPre = $("<td/>").text(elem.precio);
+
+        elemImg.append(img);
+
+        fila1.append(elemImg);
+        fila1.append(elemNom);
+        fila1.append(elemUni);
+        fila1.append(elemPre);
+
+        tbody += $(".c-menu__tbody").append(fila1);
+    }); 
+    return tbody;
+}
+
+
+function eliminarTablaMinicart() {
+    let tabla = "";
+    $(".c-menu__tbody").append(tabla);
+    console.log("Eliminado tabla minicart: ", tabla);
+}
+
 
 function productosByIdCategoria(idCategoria, nombreCategoria) {
     
@@ -519,33 +641,6 @@ function productosByIdCategoria(idCategoria, nombreCategoria) {
     });
 }
 
-
-function menuSelected(nombreItemMenu) {
-    console.log("Has entrado en menuSelected");
-
-    switch (nombreItemMenu) {
-        case "Inicio":
-            console.log("Has seleccionado Inicio-switch");
-        break;
-        case "Tienda":
-            console.log("Has seleccionado Productos-switch");
-        break;
-        case "Eventos":
-            console.log("Has seleccionado Eventos-switch");
-        break;
-        case "Blog":
-            console.log("Has seleccionado Blog-switch");
-        break;
-        case "Contacto":
-            console.log("Has seleccionado Contacto-switch");
-        break;
-        case "Compra":
-            console.log("Has seleccionado Carrito-switch");
-            //mostrarCarrito();
-        break;
-        default: console.log("Te has equivocado-switch");
-    }
-}
 
 export { productosShoppinCart, valorNatureT };
 
